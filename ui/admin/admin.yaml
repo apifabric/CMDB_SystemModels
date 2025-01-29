@@ -1,0 +1,273 @@
+about:
+  date: January 29, 2025 07:30:21
+  recent_changes: works with modified safrs-react-admin
+  version: 0.0.0
+api_root: '{http_type}://{swagger_host}:{port}/{api}'
+authentication: '{system-default}'
+info:
+  number_relationships: 6
+  number_tables: 12
+info_toggle_checked: true
+resources:
+  Department:
+    attributes:
+    - label: ' name*'
+      name: name
+      required: true
+      search: true
+      sort: true
+    - name: id
+    description: Represents departments within the organization.
+    info_list: Represents departments within the organization.
+    type: Department
+    user_key: name
+  Device:
+    attributes:
+    - label: ' name*'
+      name: name
+      required: true
+      search: true
+      sort: true
+    - name: model_id
+    - name: purchase_date
+      type: DATETIME
+    - name: warranty_expiry
+      type: DATETIME
+    - name: id
+    description: Represents devices in the CMDB.
+    info_list: Represents devices in the CMDB.
+    tab_groups:
+    - direction: tomany
+      fks:
+      - device_id
+      name: DeviceLogList
+      resource: DeviceLog
+    - direction: tomany
+      fks:
+      - device_id
+      name: IncidentList
+      resource: Incident
+    - direction: toone
+      fks:
+      - model_id
+      name: model
+      resource: Model
+    type: Device
+    user_key: name
+  DeviceLog:
+    attributes:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+    - name: device_id
+    - name: status_id
+    - name: date
+      type: DATETIME
+    description: Records historical statuses and operations of devices.
+    info_list: Records historical statuses and operations of devices.
+    tab_groups:
+    - direction: toone
+      fks:
+      - device_id
+      name: device
+      resource: Device
+    - direction: toone
+      fks:
+      - status_id
+      name: status
+      resource: Status
+    type: DeviceLog
+    user_key: id
+  Incident:
+    attributes:
+    - label: ' description*'
+      name: description
+      search: true
+      sort: true
+    - name: device_id
+    - name: id
+    - name: date_reported
+      type: DATETIME
+    description: Represents incidents related to devices.
+    info_list: Represents incidents related to devices.
+    tab_groups:
+    - direction: toone
+      fks:
+      - device_id
+      name: device
+      resource: Device
+    type: Incident
+    user_key: description
+  Location:
+    attributes:
+    - label: ' name*'
+      name: name
+      required: true
+      search: true
+      sort: true
+    - name: address
+    - name: id
+    description: Represents locations where devices are situated.
+    info_list: Represents locations where devices are situated.
+    type: Location
+    user_key: name
+  Manufacturer:
+    attributes:
+    - label: ' name*'
+      name: name
+      required: true
+      search: true
+      sort: true
+    - name: id
+    description: Represents manufacturers of devices and parts.
+    info_list: Represents manufacturers of devices and parts.
+    tab_groups:
+    - direction: tomany
+      fks:
+      - manufacturer_id
+      name: ModelList
+      resource: Model
+    type: Manufacturer
+    user_key: name
+  Model:
+    attributes:
+    - label: ' name*'
+      name: name
+      required: true
+      search: true
+      sort: true
+    - name: manufacturer_id
+    - name: id
+    description: Represents device models.
+    info_list: Represents device models.
+    tab_groups:
+    - direction: tomany
+      fks:
+      - model_id
+      name: DeviceList
+      resource: Device
+    - direction: toone
+      fks:
+      - manufacturer_id
+      name: manufacturer
+      resource: Manufacturer
+    type: Model
+    user_key: name
+  Role:
+    attributes:
+    - label: ' name*'
+      name: name
+      required: true
+      search: true
+      sort: true
+    - name: id
+    description: Represents roles assigned to system users.
+    info_list: Represents roles assigned to system users.
+    tab_groups:
+    - direction: tomany
+      fks:
+      - role_id
+      name: UserList
+      resource: User
+    type: Role
+    user_key: name
+  Software:
+    attributes:
+    - label: ' name*'
+      name: name
+      required: true
+      search: true
+      sort: true
+    - name: version
+    - name: id
+    description: Represents software that can be installed on devices.
+    info_list: Represents software that can be installed on devices.
+    type: Software
+    user_key: name
+  Status:
+    attributes:
+    - label: ' name*'
+      name: name
+      required: true
+      search: true
+      sort: true
+    - name: id
+    description: Represents device status.
+    info_list: Represents device status.
+    tab_groups:
+    - direction: tomany
+      fks:
+      - status_id
+      name: DeviceLogList
+      resource: DeviceLog
+    type: Status
+    user_key: name
+  Supplier:
+    attributes:
+    - label: ' name*'
+      name: name
+      required: true
+      search: true
+      sort: true
+    - name: contact_email
+    - name: contact_phone
+    - name: id
+    description: Represents suppliers providing devices and parts.
+    info_list: Represents suppliers providing devices and parts.
+    type: Supplier
+    user_key: name
+  User:
+    attributes:
+    - label: ' first_name*'
+      name: first_name
+      required: true
+      search: true
+      sort: true
+    - name: role_id
+    - name: last_name
+      required: true
+    - name: email
+      required: true
+    - name: id
+    description: Represents system users interacting with the CMDB.
+    info_list: Represents system users interacting with the CMDB.
+    tab_groups:
+    - direction: toone
+      fks:
+      - role_id
+      name: role
+      resource: Role
+    type: User
+    user_key: first_name
+settings:
+  HomeJS: /admin-app/home.js
+  max_list_columns: 8
+  style_guide:
+    applicationLocales:
+    - en
+    - es
+    currency_symbol: $
+    currency_symbol_position: left
+    date_format: LL
+    decimal_max: '1000000000'
+    decimal_min: '0'
+    decimal_separator: .
+    detail_mode: tab
+    edit_on_mode: dblclick
+    exclude_listpicker: false
+    include_translation: 'false'
+    keycloak_client_id: alsclient
+    keycloak_realm: kcals
+    keycloak_url: http://localhost:8080
+    locale: en
+    max_decimal_digits: '4'
+    min_decimal_digits: '2'
+    new_mode: dialog
+    pick_style: list
+    row_height: small,
+    serviceType: OntimizeEE
+    startSessionPath: /auth/login
+    style: light
+    thousand_separator: ','
+    use_keycloak: 'false'

@@ -1,0 +1,164 @@
+"models":
+- "classname": |-
+    Device
+  "code": |-
+    class Device(Base):\n    __tablename__ = 'device'\n    id = Column(Integer, primary_key=True, autoincrement=True)\n    name = Column(String(50), nullable=False)\n    model_id = Column(Integer, ForeignKey('model.id'))\n    purchase_date = Column(DateTime)\n    warranty_expiry = Column(DateTime)\n    \n
+  "description": |-
+    Represents devices in the CMDB.
+  "name": |-
+    Device
+- "classname": |-
+    Model
+  "code": |-
+    class Model(Base):\n    __tablename__ = 'model'\n    id = Column(Integer, primary_key=True, autoincrement=True)\n    name = Column(String(50), nullable=False)\n    manufacturer_id = Column(Integer, ForeignKey('manufacturer.id'))\n\n
+  "description": |-
+    Represents device models.
+  "name": |-
+    Model
+- "classname": |-
+    Manufacturer
+  "code": |-
+    class Manufacturer(Base):\n    __tablename__ = 'manufacturer'\n    id = Column(Integer, primary_key=True, autoincrement=True)\n    name = Column(String(50), nullable=False)\n\n
+  "description": |-
+    Represents manufacturers of devices and parts.
+  "name": |-
+    Manufacturer
+- "classname": |-
+    Location
+  "code": |-
+    class Location(Base):\n    __tablename__ = 'location'\n    id = Column(Integer, primary_key=True, autoincrement=True)\n    name = Column(String(100), nullable=False)\n    address = Column(String(200))\n\n
+  "description": |-
+    Represents locations where devices are situated.
+  "name": |-
+    Location
+- "classname": |-
+    Supplier
+  "code": |-
+    class Supplier(Base):\n    __tablename__ = 'supplier'\n    id = Column(Integer, primary_key=True, autoincrement=True)\n    name = Column(String(100), nullable=False)\n    contact_email = Column(String(100))\n    contact_phone = Column(String(20))\n\n
+  "description": |-
+    Represents suppliers providing devices and parts.
+  "name": |-
+    Supplier
+- "classname": |-
+    User
+  "code": |-
+    class User(Base):\n    __tablename__ = 'user'\n    id = Column(Integer, primary_key=True, autoincrement=True)\n    first_name = Column(String(50), nullable=False)\n    last_name = Column(String(50), nullable=False)\n    email = Column(String(100), nullable=False)\n    role_id = Column(Integer, ForeignKey('role.id'))\n\n
+  "description": |-
+    Represents system users interacting with the CMDB.
+  "name": |-
+    User
+- "classname": |-
+    Role
+  "code": |-
+    class Role(Base):\n    __tablename__ = 'role'\n    id = Column(Integer, primary_key=True, autoincrement=True)\n    name = Column(String(50), nullable=False)\n\n
+  "description": |-
+    Represents roles assigned to system users.
+  "name": |-
+    Role
+- "classname": |-
+    Department
+  "code": |-
+    class Department(Base):\n    __tablename__ = 'department'\n    id = Column(Integer, primary_key=True, autoincrement=True)\n    name = Column(String(100), nullable=False)\n\n
+  "description": |-
+    Represents departments within the organization.
+  "name": |-
+    Department
+- "classname": |-
+    Status
+  "code": |-
+    class Status(Base):\n    __tablename__ = 'status'\n    id = Column(Integer, primary_key=True, autoincrement=True)\n    name = Column(String(50), nullable=False)\n
+  "description": |-
+    Represents device status.
+  "name": |-
+    Status
+- "classname": |-
+    DeviceLog
+  "code": |-
+    class DeviceLog(Base):\n    __tablename__ = 'device_log'\n    id = Column(Integer, primary_key=True, autoincrement=True)\n    device_id = Column(Integer, ForeignKey('device.id'))\n    date = Column(DateTime)\n    status_id = Column(Integer, ForeignKey('status.id'))\n\n
+  "description": |-
+    Records historical statuses and operations of devices.
+  "name": |-
+    DeviceLog
+- "classname": |-
+    Software
+  "code": |-
+    class Software(Base):\n    __tablename__ = 'software'\n    id = Column(Integer, primary_key=True, autoincrement=True)\n    name = Column(String(100), nullable=False)\n    version = Column(String(20))\n\n
+  "description": |-
+    Represents software that can be installed on devices.
+  "name": |-
+    Software
+- "classname": |-
+    Incident
+  "code": |-
+    class Incident(Base):\n    __tablename__ = 'incident'\n    id = Column(Integer, primary_key=True, autoincrement=True)\n    device_id = Column(Integer, ForeignKey('device.id'))\n    description = Column(String(200))\n    date_reported = Column(DateTime)\n\n
+  "description": |-
+    Represents incidents related to devices.
+  "name": |-
+    Incident
+"name": |-
+  CMDB_SystemModels
+"rules": []
+"test_data": |-
+  Test Data for Each Table
+"test_data_rows":
+- "code": |-
+    manufacturer1 = Manufacturer(id=1, name="TechCorp")
+  "test_data_row_variable": |-
+    manufacturer1
+- "code": |-
+    manufacturer2 = Manufacturer(id=2, name="GadgetWorks")
+  "test_data_row_variable": |-
+    manufacturer2
+- "code": |-
+    manufacturer3 = Manufacturer(id=3, name="DeviceMakers")
+  "test_data_row_variable": |-
+    manufacturer3
+- "code": |-
+    manufacturer4 = Manufacturer(id=4, name="Innovatech")
+  "test_data_row_variable": |-
+    manufacturer4
+- "code": |-
+    device1 = Device(id=1, name="Printer Model X", model_id=1, purchase_date=date(2021, 6, 1), warranty_expiry=date(2023, 6, 1))
+  "test_data_row_variable": |-
+    device1
+- "code": |-
+    device2 = Device(id=2, name="Laptop Pro", model_id=2, purchase_date=date(2020, 9, 15), warranty_expiry=date(2022, 9, 15))
+  "test_data_row_variable": |-
+    device2
+- "code": |-
+    device3 = Device(id=3, name="Server Prime", model_id=3, purchase_date=date(2019, 11, 18), warranty_expiry=date(2021, 11, 18))
+  "test_data_row_variable": |-
+    device3
+- "code": |-
+    device4 = Device(id=4, name="Router Spec", model_id=4, purchase_date=date(2022, 7, 10), warranty_expiry=date(2024, 7, 10))
+  "test_data_row_variable": |-
+    device4
+- "code": |-
+    incident1 = Incident(id=1, device_id=1, description="Printer not responding", date_reported=date(2023, 3, 10))
+  "test_data_row_variable": |-
+    incident1
+- "code": |-
+    incident2 = Incident(id=2, device_id=2, description="Laptop overheating", date_reported=date(2023, 5, 12))
+  "test_data_row_variable": |-
+    incident2
+- "code": |-
+    incident3 = Incident(id=3, device_id=3, description="Server downtime", date_reported=date(2023, 1, 22))
+  "test_data_row_variable": |-
+    incident3
+- "code": |-
+    incident4 = Incident(id=4, device_id=4, description="Router latency", date_reported=date(2023, 4, 5))
+  "test_data_row_variable": |-
+    incident4
+"test_data_sqlite": |-
+  INSERT INTO manufacturer (id, name) VALUES (1, 'TechCorp');
+  INSERT INTO manufacturer (id, name) VALUES (2, 'GadgetWorks');
+  INSERT INTO manufacturer (id, name) VALUES (3, 'DeviceMakers');
+  INSERT INTO manufacturer (id, name) VALUES (4, 'Innovatech');
+  INSERT INTO device (id, name, model_id, purchase_date, warranty_expiry) VALUES (1, 'Printer Model X', 1, '2021-06-01', '2023-06-01');
+  INSERT INTO device (id, name, model_id, purchase_date, warranty_expiry) VALUES (2, 'Laptop Pro', 2, '2020-09-15', '2022-09-15');
+  INSERT INTO device (id, name, model_id, purchase_date, warranty_expiry) VALUES (3, 'Server Prime', 3, '2019-11-18', '2021-11-18');
+  INSERT INTO device (id, name, model_id, purchase_date, warranty_expiry) VALUES (4, 'Router Spec', 4, '2022-07-10', '2024-07-10');
+  INSERT INTO incident (id, device_id, description, date_reported) VALUES (1, 1, 'Printer not responding', '2023-03-10');
+  INSERT INTO incident (id, device_id, description, date_reported) VALUES (2, 2, 'Laptop overheating', '2023-05-12');
+  INSERT INTO incident (id, device_id, description, date_reported) VALUES (3, 3, 'Server downtime', '2023-01-22');
+  INSERT INTO incident (id, device_id, description, date_reported) VALUES (4, 4, 'Router latency', '2023-04-05');
