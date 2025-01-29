@@ -1,0 +1,53 @@
+{
+    "rules": [],
+    "models": [
+        {
+            "classname": "Department",
+            "code": "class Department(Base):  # type: ignore\n    \"\"\"\n    description: Represents departments within the organization.\n    \"\"\"\n    __tablename__ = 'department'\n    _s_collection_name = 'Department'  # type: ignore\n\n    id = Column(Integer, primary_key=True)\n    name = Column(String(100), nullable=False)"
+        },
+        {
+            "classname": "Location",
+            "code": "class Location(Base):  # type: ignore\n    \"\"\"\n    description: Represents locations where devices are situated.\n    \"\"\"\n    __tablename__ = 'location'\n    _s_collection_name = 'Location'  # type: ignore\n\n    id = Column(Integer, primary_key=True)\n    name = Column(String(100), nullable=False)\n    address = Column(String(200))"
+        },
+        {
+            "classname": "Manufacturer",
+            "code": "class Manufacturer(Base):  # type: ignore\n    \"\"\"\n    description: Represents manufacturers of devices and parts.\n    \"\"\"\n    __tablename__ = 'manufacturer'\n    _s_collection_name = 'Manufacturer'  # type: ignore\n\n    id = Column(Integer, primary_key=True)\n    name = Column(String(50), nullable=False)\n\n    # parent relationships (access parent)\n\n    # child relationships (access children)\n    ModelList : Mapped[List[\"Model\"]] = relationship(back_populates=\"manufacturer\")"
+        },
+        {
+            "classname": "Role",
+            "code": "class Role(Base):  # type: ignore\n    \"\"\"\n    description: Represents roles assigned to system users.\n    \"\"\"\n    __tablename__ = 'role'\n    _s_collection_name = 'Role'  # type: ignore\n\n    id = Column(Integer, primary_key=True)\n    name = Column(String(50), nullable=False)\n\n    # parent relationships (access parent)\n\n    # child relationships (access children)\n    UserList : Mapped[List[\"User\"]] = relationship(back_populates=\"role\")"
+        },
+        {
+            "classname": "Software",
+            "code": "class Software(Base):  # type: ignore\n    \"\"\"\n    description: Represents software that can be installed on devices.\n    \"\"\"\n    __tablename__ = 'software'\n    _s_collection_name = 'Software'  # type: ignore\n\n    id = Column(Integer, primary_key=True)\n    name = Column(String(100), nullable=False)\n    version = Column(String(20))"
+        },
+        {
+            "classname": "Status",
+            "code": "class Status(Base):  # type: ignore\n    \"\"\"\n    description: Represents device status.\n    \"\"\"\n    __tablename__ = 'status'\n    _s_collection_name = 'Status'  # type: ignore\n\n    id = Column(Integer, primary_key=True)\n    name = Column(String(50), nullable=False)\n\n    # parent relationships (access parent)\n\n    # child relationships (access children)\n    DeviceLogList : Mapped[List[\"DeviceLog\"]] = relationship(back_populates=\"status\")"
+        },
+        {
+            "classname": "Supplier",
+            "code": "class Supplier(Base):  # type: ignore\n    \"\"\"\n    description: Represents suppliers providing devices and parts.\n    \"\"\"\n    __tablename__ = 'supplier'\n    _s_collection_name = 'Supplier'  # type: ignore\n\n    id = Column(Integer, primary_key=True)\n    name = Column(String(100), nullable=False)\n    contact_email = Column(String(100))\n    contact_phone = Column(String(20))"
+        },
+        {
+            "classname": "Model",
+            "code": "class Model(Base):  # type: ignore\n    \"\"\"\n    description: Represents device models.\n    \"\"\"\n    __tablename__ = 'model'\n    _s_collection_name = 'Model'  # type: ignore\n\n    id = Column(Integer, primary_key=True)\n    name = Column(String(50), nullable=False)\n    manufacturer_id = Column(ForeignKey('manufacturer.id'))\n\n    # parent relationships (access parent)\n    manufacturer : Mapped[\"Manufacturer\"] = relationship(back_populates=(\"ModelList\"))\n\n    # child relationships (access children)\n    DeviceList : Mapped[List[\"Device\"]] = relationship(back_populates=\"model\")"
+        },
+        {
+            "classname": "User",
+            "code": "class User(Base):  # type: ignore\n    \"\"\"\n    description: Represents system users interacting with the CMDB.\n    \"\"\"\n    __tablename__ = 'user'\n    _s_collection_name = 'User'  # type: ignore\n\n    id = Column(Integer, primary_key=True)\n    first_name = Column(String(50), nullable=False)\n    last_name = Column(String(50), nullable=False)\n    email = Column(String(100), nullable=False)\n    role_id = Column(ForeignKey('role.id'))\n\n    # parent relationships (access parent)\n    role : Mapped[\"Role\"] = relationship(back_populates=(\"UserList\"))"
+        },
+        {
+            "classname": "Device",
+            "code": "class Device(Base):  # type: ignore\n    \"\"\"\n    description: Represents devices in the CMDB.\n    \"\"\"\n    __tablename__ = 'device'\n    _s_collection_name = 'Device'  # type: ignore\n\n    id = Column(Integer, primary_key=True)\n    name = Column(String(50), nullable=False)\n    model_id = Column(ForeignKey('model.id'))\n    purchase_date = Column(DateTime)\n    warranty_expiry = Column(DateTime)\n\n    # parent relationships (access parent)\n    model : Mapped[\"Model\"] = relationship(back_populates=(\"DeviceList\"))\n\n    # child relationships (access children)\n    DeviceLogList : Mapped[List[\"DeviceLog\"]] = relationship(back_populates=\"device\")\n    IncidentList : Mapped[List[\"Incident\"]] = relationship(back_populates=\"device\")"
+        },
+        {
+            "classname": "DeviceLog",
+            "code": "class DeviceLog(Base):  # type: ignore\n    \"\"\"\n    description: Records historical statuses and operations of devices.\n    \"\"\"\n    __tablename__ = 'device_log'\n    _s_collection_name = 'DeviceLog'  # type: ignore\n\n    id = Column(Integer, primary_key=True)\n    device_id = Column(ForeignKey('device.id'))\n    date = Column(DateTime)\n    status_id = Column(ForeignKey('status.id'))\n\n    # parent relationships (access parent)\n    device : Mapped[\"Device\"] = relationship(back_populates=(\"DeviceLogList\"))\n    status : Mapped[\"Status\"] = relationship(back_populates=(\"DeviceLogList\"))"
+        },
+        {
+            "classname": "Incident",
+            "code": "class Incident(Base):  # type: ignore\n    \"\"\"\n    description: Represents incidents related to devices.\n    \"\"\"\n    __tablename__ = 'incident'\n    _s_collection_name = 'Incident'  # type: ignore\n\n    id = Column(Integer, primary_key=True)\n    device_id = Column(ForeignKey('device.id'))\n    description = Column(String(200))\n    date_reported = Column(DateTime)\n\n    # parent relationships (access parent)\n    device : Mapped[\"Device\"] = relationship(back_populates=(\"IncidentList\"))"
+        }
+    ]
+}
